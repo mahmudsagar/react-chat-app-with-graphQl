@@ -23,8 +23,8 @@ const typeDefs = `
     
 `;
 
-const subscriber = []
-const onMessagesUpdate = (fn) => subscriber.push(fn)
+const subscribers = []
+const onMessagesUpdates = (fn) => subscribers.push(fn)
 
 const resolvers = {
   Query: {
@@ -38,7 +38,7 @@ const resolvers = {
         user,
         content,
       });
-      subscriber.forEach((fn) => fn())
+      subscriber.forEach((fn) => fn());
       return id;
     },
   },
@@ -46,9 +46,9 @@ const resolvers = {
     messages: {
       subscribe: (parent, args, { pubsub }) => {
         const channel = Math.random().toString(36).slice(2, 15);
-        onMessagesUpdate(()=> pubsub.publish(channel, {messages}))
-        setTimeout(()=> pubsub.publish(channel, {messages}), 0)
-        return pubsub.asyncIterator(channel)
+        onMessagesUpdates(() => pubsub.publish(channel, { messages }));
+        setTimeout(() => pubsub.publish(channel, { messages }), 0);
+        return pubsub.asyncIterator(channel);
       },
     },
   },
